@@ -168,6 +168,32 @@ Wnioskowanie Boolowskie:
   Warunek konieczny: jeśli przestrzeń hipotez ma nieskończony wymiar VCdim to nie jest potencjalnie wyuczalna. \\
   Fundamentalne: Jeśli przestrzeń hipotez ma skończony wymiar VC, to jest potencjalnie wyuczalna.
 
+\subsection{Classification}
+techniques: decision tree based methods, rule-base methods, memory based reasoning, neural networks, genetic algorithms, ... \\
+Decision tree generation:
+  \begin{enumerate}
+    \item Tree construction: all training examples are at the root ; partition examples recursively based on selected attribute
+    \item Tree pruning: identify and remove branches that reflect noise or outliers
+  \end{enumerate}
+  Nearest neighbors classifiers:
+  \begin{itemize}
+    \item requires: set of sorted instances, distance metric to compute between instances, value of k - the number of nearest neighbors to retrieve
+    \item classification: retrieve k nearest neighbors, use class lebales of the nearest neighbors to determine the class label of the unseen instance
+    \item wada: classifying instances is expensive
+  \end{itemize}
+  Genetic algorithms - rodzaj heurystyki przeszukującej przestrzeń alternatywnych rozwiązań problemu w celu wyszukiwania rozwiązań najlepszych. Etapy:
+  \begin{itemize}
+    \item losowana populacja poczatkowa
+    \item Selekcja: ocena populacji, dobre biorą udział w reprodukcji
+    \item wybrane osobniki poddawane są operacją: krzyżowanie, mutacja
+    \item nowe pokolenie wybrane na podstawie funkcji oceny
+  \end{itemize}
+  Genetic algorithm and classification: initial population - cconsist of randomly generated rules, fitness of a rule is represented by its classification accuracy on a set of training examples
+\subsection{Bayesian Classification}
+  \begin{itemize}
+    \item klasyfikacja statystyczna, opera się na twierdzeniu Bayesa
+    \item rozważamy hipotezę, że obiekt o właściwości X należy do klasy C - czyli chcemy obliczyć prawdopodobieństwo $P(C | X)$ tego, że obiekt o właściwości X należy do klasy C
+  \end{itemize}
 \subsection{Clustering}
 Uczenie bez nadzoru, a klasyfikacja to metoda przewidywania przynależności obiektów do klas decyzyjnych. \\
 Dane: liczba klastrów, funkcja odległości określona na zbiorze obiektów, funkcja oceny jakości klastrów; Problem: podział zbioru obiektów na k klastrów, tak aby funkcja jakości przyjmowała maksymalną wartość
@@ -181,11 +207,15 @@ Dane: liczba klastrów, funkcja odległości określona na zbiorze obiektów, fu
     \item grupowanie hierarchiczne: struktura drzewiasta, określone deterministycznie - budowanie drzewa klastrów dla zioru obiektów; najniższy poziom n liści, każdy jest klastrem; repeat: znajdź najbliższą parę klastrów (parę poddrzew) i je połącz \\
     Odległości między klastrami: single linkage, complete linkage, ...
     \item probabilistyczne grupowanie: struktura płaska klastrów, określone probabilistycznie: obiekt należy do klastra z pewnym stopniem prawdopodobieństwa, każdy klaster jest opisany jednym rozkładem prawdopodobieństwa; założenie: wszystkie rozkłady są rozkładami normalnymi różniącymi się wartościami oczekiwanymi i odchyleniami standardowymi
+    \item agglomerative approach: start with single-instance clusters; at each step join two closest clusters
+    \item density-based clustering methods: discover clusters of arbitrary shape, handle noise, need density parameters as termination condition
   \end{itemize}
   Miary odległości: Euclidean, Hamming, Minkowski, ..\\
   Zastosowanie: kwantyzacja wektorowa, redukcja obrazów \\
   Twierdzenie: problem grupowania minimalnego względem sumy kwadratów błędów jest NP-trudny nawet dla $k = 2$. \\
   Wybór liczby grup - analiza zmiany funkcji jakości klastrów w zależności od liczby klastrów. \\
+  \paragraph{Outlier discovery} : \underline{statistical approaches} (assume a model underlying distribution that generates data set e.g. normal distribution), \underline{distance based approach}, \underline{deviation approach} - identifies outlier by examining the main characteristics of objects in a group \\
+  Clustering algorithms can be categorized into 1. partitioning methods, 2. hierarchical methods, 3. density-based methods (idea: clusters are dense regions in the data space separated by regions of lower object density, discover clusters of arbitrary shape), 4. grid-based methods and 5. model-based methods.
   \textbf{Algorytm EM} (Expection - Maximization): dana liczba klastrów k, dla każdego atrybutu rzeczywistego znależć k układów parametrów (opisy klastrów) : wartość oczekiwana, odchylenie standardowe, ....,
   \begin{figure}[H]
     \centering
@@ -199,7 +229,8 @@ W sieciach rekurencyjnych istnieją \textbf{sprzężenia zwrotne między wejści
     \item Dla ustalonej architektury sieci i konfiguracji parametrów, znalezienie optymalnego układu wag jest co najmniej NP-trudne.
     \item predykcja: na podstawie danych wejściowych przewidywać dane wyjściowe, bez konieczności definiowania związku między danymi wejściowymi a wyjściowymi; klasyfikacja i rozpoznawanie; \textbf{kojarzenie i analiza danych}: wykrywanie istotnych powiązań między danymi
   \end{itemize}
-\textbf{Sieć Hopfielda}: %TODO przygotowac opis; dopracować sieci rekurencyjne
+Idea: make use of sequential information, traditional neural network assumes that all inputs are independent of each other; \underline{perform task for every element of a sequence},\\ \underline{ with the output being depended on the previous computations}; they have a memory which captures information about what has been calculated so far
+Przykład sieci: Sieć Hopfielda - sieć jednokierunkowa ze sprzężeniem zwrotnym
 \subsection{Boosting. Metoda wzmocnienia klasyfikatorów}
 %TODO: doczytac z innych materialow
 Idea: budowanie mocnego i złożonego klasyfikatora ze słabych i prostych klasyfikatorów. \\
@@ -247,6 +278,46 @@ Mining Association Rules: generate all frequent itemsets; generate high confiden
 \end{itemize}
 \textbf{Rule generation}: given a frequent itemset $L$, find all non-empty subsets $f$ of itemset s.t. $f -> L$ - $f$ satisfies the minimum confidence requirement.
 \section{Rough Sets}
+%http://mst.mimuw.edu.pl/lecture.php?lecture=syd&part=Ch4
+zastosowania: redukacja danych, selekcja ważnych atrybutów, generowanie reguł decyzyjnych\\
+Tablica decyzyjna:
+  \begin{itemize}
+    \item atrybuty - cechy, których wartości na obiektach są dostępne
+    \item decyzja - znana jest tylko dla obiektów treningowych
+  \end{itemize}
+  Koncepcja \textbf{Reduktu}: niezależny podzbiór atrybutów zachowujący taki sam podział na klasy decyzyjne jak wszystkie atrybuty. Redukt to najmniejszy zbiór atrybutów, przy którym zostaje zachowana dotychczasowa rozróżnialność obiektów. Musi spełniać kryteria:
+    \begin{enumerate}
+        \item niezależny zbiór atrybutów - tylko atrybuty niezbędne
+        \item musi zachowywać taką samą rozróżnialność obiektów jak zbiór redukowany
+    \end{enumerate}
+\section{Fuzzy Sets - Zbiory Rozmyte}
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.50]{images/rozmyty.png}
+\end{figure}
+
+Ważne: funkcja każdemu elementowi $x$ przypisuje jego stopień przynależności do zbioru rozmytego. \\
+Operacja na zbiorach rozmytych: przecięcie, iloczyn algebraiczny, suma, dopełnienie, iloczyn kartezjanski,
+ \begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.50]{images/dzialania.png}
+\end{figure}
+
+\section{Time Searies Data Mining}
+Zastosowania: data compresion, explanatory, signal processing, prediction (use the model to predict feature values of the time series) \\
+components of a time series:
+\begin{itemize}
+  \item trend component - reprezentuje osólny kierunek rozwoju zjawiska - systematyczne zmiany jakim podlega zjawisko,
+  \item seasonal component - wahania okresowe, regularne odchylenia od tendencji rozwojowej,
+  \item random  noise component - zakłócenia, wahania przypadkowe,
+  \item constant (przeciętny poziom zmiennej)
+\end{itemize}
+Podstawowe modele matematyczne: model addytywny, model multiplikatywny; w modelach brane jest pod uwagę: funkcja trendu, funkcja czasu charakteryzująca wahania sezonowe, funkcja czasu charakteryzująca wahania cykliczne, składnik losowy \\
+Wyodrębnianie i analiza trendu:
+  \begin{itemize}
+    \item mechaniczne - najczęściej średnie ruchome - polega na lokalnym (w czasie) uśrednianiu przebiegu y
+  \end{itemize}
+
 \section{Matematyczne pojęcia}
 \paragraph{Statystyka} : %TODO pomóc Tomkowi
 \paragraph{Chi-square} : any statistical hypothesis test wherein the sampling distribution of the test statistic is a chi-square distribution when the null hypothesis is true. Example: test - that variance of a normally distributed population has a given value based on a sample variance. \\
