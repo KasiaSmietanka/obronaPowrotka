@@ -222,7 +222,30 @@ Dane: liczba klastrów, funkcja odległości określona na zbiorze obiektów, fu
       \includegraphics[scale=0.50]{images/algEM.png}
   \end{figure}
 \subsection{Hidden Markov Model}
-
+Tree fundamental questions for an HMM:
+  \begin{itemize}
+    \item compute the probability of a given observation sequwnce, when the tag sequence is hidden (language modeling)
+    \item given an observation sequence, find the most likely hidden state sequence (tagging)
+    \item given observation sequence and a set of states, find the parameters that would make the observations most likely (parameter estimation)
+  \end{itemize}
+\textbf{Markov Chain} - a process satisfies the Markov property if one can make predictions for the future of the process based solely on its present state just as well as one could knowing the process's full history.\\
+Wykorzystanie: temporal pattern recognition, part-of-speech tagging, musical score fllowing
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.70]{images/model.png}
+\end{figure}
+\paragraph{Viterbi algorithm} : dynamical programming algorithm that \textbf{allows us to compute the most probable path}.
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.50]{images/viterbi.png}
+\end{figure}
+Właściwości: it requires knowledge of the parameters of the HMM model and a particular output sequence and it finds the state sequence that is most likely to have generated that output sequence. It finds a maximum over all possible state sequences.
+\paragraph{Baum-Welch algorithm} : \textbf{find the unknown parameters of a hidden Markov Model}; makes use of the forward-backward algorithm, a special case of the Expectation Maximization algorithm
+  \begin{enumerate}
+    \item Start with initial probability estimates
+    \item Compute expectations of how often each tyransition/ emission is used
+    \item re-estimate the probabilities based on those expectations and repear until convergence
+  \end{enumerate}
 \subsection{Sieci rekurencyjne}
 W sieciach rekurencyjnych istnieją \textbf{sprzężenia zwrotne między wejściem, a wyjściem}.
   \begin{itemize}
@@ -231,6 +254,17 @@ W sieciach rekurencyjnych istnieją \textbf{sprzężenia zwrotne między wejści
   \end{itemize}
 Idea: make use of sequential information, traditional neural network assumes that all inputs are independent of each other; \underline{perform task for every element of a sequence},\\ \underline{ with the output being depended on the previous computations}; they have a memory which captures information about what has been calculated so far
 Przykład sieci: Sieć Hopfielda - sieć jednokierunkowa ze sprzężeniem zwrotnym
+\subsection{Uczenie ze wzmocnieniem}
+Nie są dostarczane przykłady trenujące, a jedynie wartościująca informacja trenująca, oceniające jego dotychczasową skuteczność. Podstawa: dynamiczne interakcje ucznia ze środowiskiem, w którym działa, realizując swoje zadanie. Interakcje te odbywają się w dyskretnych krokach czasu i podlegają obserwowaniu przez ucznia kolejnych stanów środowiska oraz wykonaniu wybranych zgodnie z jego obecną strategią decyzyjną akcji. Po wykonaniu akcji uczeń otrzymuje rzeczywistoliczbowe wartości \textit{wzmocnienia} lub \textit{nagrody}, które stanowią \textbf{miarę oceny jakości jego działania}. Wykonanie akcji może powodować zmianę stanu środowiska.
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.70]{images/wzm.png}
+\end{figure}
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.50]{images/wzm2.png}
+\end{figure}
+Zastosowania: uczące się roboty, gry planszowe, ... . \\ Ważne pojęcia: reprezentacja stanów i akcji $+$ funkcja wzmocnienia $=$ system uczący się ze wzmocnieniem
 \subsection{Boosting. Metoda wzmocnienia klasyfikatorów}
 %TODO: doczytac z innych materialow
 Idea: budowanie mocnego i złożonego klasyfikatora ze słabych i prostych klasyfikatorów. \\
